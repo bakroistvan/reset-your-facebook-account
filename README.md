@@ -84,14 +84,33 @@ var i = setInterval(function () {
 ```js
 setInterval (function () {
   $("html, body").animate({ scrollTop: $(document).height() }, "slow");
-  $('*[aria-label="Hidden from Timeline"]').each(function () {
+  $('*[data-tooltip-content="Hidden from timeline"]').each(function () {
     $(this).parents('.bottomborder').remove();
   });
-  var allowed = $('*[aria-label="Allowed on Timeline"] span').last();
+  var allowed = $('*[data-tooltip-content="Allowed on timeline"] span').last();
   allowed.click();
-  $('.uiContextualLayer').find('li:nth-child(2)').find('a span').click();
+  $('.uiContextualLayer').find('ul').each(function(ix) {
+    // Only Delete
+    if($(this).children().length == 1) {
+      $(this).find('li:nth-child(1)').find('a span').click();
+    }
+    // Allow,Hide,separator,>>delete<<
+    if($(this).children().length == 4) {
+      $(this).find('li:nth-child(4)').find('a span').click();
+    }
+    // Allow,>>Hide<<
+    $(this).find('li:nth-child(2)').find('a span').click();
+  })
+
+  setTimeout(function () {
+    $("button:contains(Delete Post):visible").click();
+    $("span:contains('Delete')").click()
+    last.closest("table").remove();
+  }, 1000);
+
   allowed.parents('.bottomborder').remove();
-}, 400);
+}, 5000);
+
 ```
 
 
